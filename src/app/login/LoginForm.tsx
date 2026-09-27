@@ -3,10 +3,11 @@
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { toAuthEmail } from "@/lib/username";
 
 export function LoginForm() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
+  const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -19,6 +20,11 @@ export function LoginForm() {
     setBusy(true);
     setError(null);
     setNotice(null);
+
+    const email = toAuthEmail(identifier);
+    if (!email) {
+      return stop({ error: "Usernames can use letters, numbers, dots, dashes and underscores." });
+    }
 
     const supabase = createClient();
     const signIn = await supabase.auth.signInWithPassword({ email, password });
@@ -35,7 +41,7 @@ export function LoginForm() {
       return stop({
         error:
           code === "user_already_exists" || code === "email_exists"
-            ? "That password doesn't match this email."
+            ? "That password doesn't match."
             : code === "weak_password"
               ? "Pick a password with at least 6 characters."
               : signUp.error.message,
@@ -44,7 +50,7 @@ export function LoginForm() {
     if (signUp.data.session) return enter();
     // Supabase hides whether an email exists; an empty identity list means it does.
     if (signUp.data.user?.identities?.length === 0) {
-      return stop({ error: "That password doesn't match this email." });
+      return stop({ error: "That password doesn't match." });
     }
     stop({ notice: "Nearly there. Confirm your email, then tap Let's go again." });
   }
@@ -61,22 +67,25 @@ export function LoginForm() {
     setBusy(false);
   }
 
-  const ready = email.includes("@") && password.length > 0;
+  const ready = identifier.trim().length > 0 && password.length > 0;
 
   return (
     <form onSubmit={submit} className="card rounded-[28px] p-2">
       <label className="block rounded-[22px] px-4 pt-3 pb-2 transition focus-within:bg-white/[0.04]">
-        <span className="text-[12px] font-medium uppercase tracking-[0.12em] text-muted">Email</span>
+        <span className="text-[12px] font-medium uppercase tracking-[0.12em] text-muted">
+          Username or email
+        </span>
         <input
-          type="email"
-          inputMode="email"
-          autoComplete="email"
+          type="text"
+          autoComplete="username"
           autoCapitalize="none"
+          autoCorrect="off"
+          spellCheck={false}
           enterKeyHint="next"
           required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="you@yourbusiness.com.au"
+          value={identifier}
+          onChange={(e) => setIdentifier(e.target.value)}
+          placeholder="e.g. dave"
           className="mt-0.5 block w-full bg-transparent text-[18px] outline-none placeholder:text-white/25"
         />
       </label>
