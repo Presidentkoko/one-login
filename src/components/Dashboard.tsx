@@ -15,6 +15,7 @@ import {
   type Entry,
 } from "@/lib/money";
 import { createClient } from "@/lib/supabase/client";
+import { displayName } from "@/lib/username";
 
 const COLUMNS = "id, kind, customer, description, amount_cents, created_at";
 
@@ -178,7 +179,7 @@ export function Dashboard({
             <>
               <button aria-label="Close menu" className="fixed inset-0 z-20 cursor-default" onClick={() => setMenuOpen(false)} />
               <div className="absolute right-0 z-30 mt-2 w-64 rounded-2xl border border-line bg-panel/95 p-2 shadow-2xl backdrop-blur-xl animate-fade-in">
-                <p className="truncate px-3 pt-2 pb-3 text-[13px] text-muted">{email}</p>
+                <p className="truncate px-3 pt-2 pb-3 text-[13px] text-muted">{displayName(email)}</p>
                 <button onClick={signOut} className="w-full rounded-xl px-3 py-3 text-left text-[15px] font-medium active:bg-white/5">
                   Sign out
                 </button>
