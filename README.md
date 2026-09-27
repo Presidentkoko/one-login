@@ -1,19 +1,20 @@
 # One Login
 
-**One login. One screen. One button.**
+**One login. One screen. One button.** Live: https://one-login.vercel.app
+
 This month's money in, money out and profit, big and green when you're in the black, red when you're not. Finish a job, tap **Job done**, and the numbers move straight away.
 
 Built with Next.js 16 (App Router), Supabase (Auth + Postgres with row-level security) and Tailwind CSS 4. Deployed on Vercel.
 
 ## The 30-second test
 
-1. Type an email and a password, then tap **Let's go**. New users get an account on the spot, from the same button.
+1. Type a username (or an email) and a password, then tap **Let's go**. New users get an account on the spot, from the same button.
 2. Tap **Job done**. Enter the customer, the job and the price, then tap **Add**.
 3. The profit number counts up and pulses. Made a mistake? Tap **Undo**.
 
 ## What's in it
 
-- **One button to sign in.** It signs you in, or creates the account if the email is new.
+- **One button to sign in.** A username or an email both work. It signs you in, or creates the account if it's new.
 - **One screen.** It shows profit for the month (green or red), money in, money out, the days left in the month, and how many cents of every dollar you keep.
 - **Instant updates.** Changes show immediately and sync in the background, with rollback if the network drops.
 - **Speed.** Recent customers and jobs appear as one-tap chips, and costs have presets (Materials, Fuel, Tools, Subbie, Wages).
